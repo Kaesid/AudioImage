@@ -16,13 +16,13 @@ const AudioImage = () => {
 
   return (
     <VisualPage>
-      <Canvas>
-        <Suspense fallback={null}>
-          <ambientLight />
+      <Suspense fallback={<h2>loading...</h2>}>
+        <Canvas>
+          <ambientLight intensity={1} />
           <pointLight position={[10, 10, 10]} />
-          <Visual position={[-1.2, 0, 0]} />
-        </Suspense>
-      </Canvas>
+          <Visual position={[0, 0, 0]} />
+        </Canvas>
+      </Suspense>
     </VisualPage>
   );
 };

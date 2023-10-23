@@ -1,4 +1,4 @@
-const appName = "VisualStyle";
+const appName = "AudioImage";
 
 enum Messages {
   WRONG_PAGE = "It seems like you're lost, mate...",
