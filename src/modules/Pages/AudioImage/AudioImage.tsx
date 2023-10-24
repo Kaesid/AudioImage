@@ -4,6 +4,9 @@ import { VisualPage } from "./styled-components";
 import Visual from "./components/Visual/Visual";
 import { setSessionActive } from "../../../redux/commonSlice";
 import { useAppDispatch } from "../../../redux/hooks";
+import { Html } from "@react-three/drei";
+import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from "@react-three/postprocessing";
+import Example from "./components/Example";
 
 const AudioImage = () => {
   const dispatch = useAppDispatch();
@@ -16,13 +19,29 @@ const AudioImage = () => {
 
   return (
     <VisualPage>
-      <Suspense fallback={<h2>loading...</h2>}>
-        <Canvas>
-          <ambientLight intensity={1} />
-          <pointLight position={[10, 10, 10]} />
-          <Visual position={[0, 0, 0]} />
-        </Canvas>
-      </Suspense>
+      <Canvas
+        camera={{ position: [0, 0, 3] }}
+        gl={{
+          powerPreference: "high-performance",
+          alpha: false,
+          antialias: false,
+          stencil: false,
+          depth: false,
+        }}
+      >
+        <color attach="background" args={["#0c269b"]} />
+        <fog color="#2a14aa" attach="fog" near={8} far={30} />
+
+        <Suspense fallback={<Html>loading...</Html>}>
+          <Example position={[0, 0, 0]} />
+        </Suspense>
+        <EffectComposer multisampling={0} disableNormalPass={true}>
+          <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
+          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={3} />
+          <Noise opacity={0.025} />
+          <Vignette eskil={false} offset={0.1} darkness={1.1} />
+        </EffectComposer>
+      </Canvas>
     </VisualPage>
   );
 };
