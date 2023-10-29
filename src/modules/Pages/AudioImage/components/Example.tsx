@@ -1,24 +1,44 @@
 import { MeshProps, useFrame, useLoader } from "@react-three/fiber";
-import { useRef, useState } from "react";
-import { MathUtils, Mesh, TextureLoader } from "three";
+import { useRef, useState, useEffect } from "react";
+import { MathUtils, Mesh, TextureLoader, AudioAnalyser } from "three";
 import { canvasImage as backgroundImage } from "../../../../assets/images";
-import { Html, MeshDistortMaterial, Icosahedron, useTexture, useCubeTexture } from "@react-three/drei";
+import { Html, MeshDistortMaterial, Icosahedron, useTexture, useCubeTexture, PositionalAudio } from "@react-three/drei";
 import { nx, ny, nz, px, py, pz } from "../../../../assets/images/cube";
+import sample from "./sample.mp3";
+import { PlayButton } from "../styled-components";
 
-const MainSphere = ({ material }: any) => {
+const useAnalyse = ({ playerRef }: any) => {
+  const analyzer = useRef<AudioAnalyser | null>(null);
+
+  useEffect(() => {
+    if (!playerRef?.current) return;
+    analyzer.current = new AudioAnalyser(playerRef.current, 128);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerRef?.current]);
+
+  return { analyzer };
+};
+
+const MainSphere = ({ material, playerRef }: any) => {
   const main = useRef<any>(null!);
+  const { analyzer } = useAnalyse({ playerRef });
 
   // main sphere rotates following the mouse position
   useFrame(({ clock, mouse }) => {
     if (!main.current.rotation) return;
+    if (analyzer?.current) {
+      const data = analyzer.current.getFrequencyData();
+      console.log(data);
+      main.current.rotation.y = data[5];
+      main.current.rotation.x = data[6];
+    }
+
     main.current.rotation.z = clock.getElapsedTime();
-    main.current.rotation.y = MathUtils.lerp(main.current.rotation.y, mouse.x * Math.PI, 0.1);
-    main.current.rotation.x = MathUtils.lerp(main.current.rotation.x, mouse.y * Math.PI, 0.1);
   });
   return <Icosahedron args={[1, 4]} ref={main} material={material} position={[0, 0, 0]} />;
 };
 
-const Instances = ({ material }: any) => {
+const Instances = ({ material, playerRef }: any) => {
   // we use this array ref to store the spheres after creating them
   const [sphereRefs] = useState(() => []);
   // we use this array to initialize the background spheres
@@ -45,7 +65,7 @@ const Instances = ({ material }: any) => {
   });
   return (
     <>
-      <MainSphere material={material} />
+      <MainSphere material={material} playerRef={playerRef} />
       {initialPositions.map((pos, i) => (
         <Icosahedron
           args={[1, 4]}
@@ -59,20 +79,41 @@ const Instances = ({ material }: any) => {
   );
 };
 
-const Example = (props: MeshProps) => {
-  const bumpMap = useTexture(backgroundImage);
+const AudioPlayer = ({ source, playerRef, toggleStatus }: any) => {
+  return (
+    <>
+      <PositionalAudio ref={playerRef} url={source} />
+      <Html>
+        <PlayButton onClick={toggleStatus}>PLAY</PlayButton>
+      </Html>
+    </>
+  );
+};
 
-  const envMap = useCubeTexture([px, ny, py, ny, pz, nz], { path: "" });
+const Example = (props: MeshProps) => {
+  const bumpMap = useTexture(px);
+
+  const envMap = useCubeTexture([px, nx, py, ny, pz, nz], { path: "" });
   // We use `useState` to be able to delay rendering the spheres until the material is ready
   const [material, set] = useState();
+  const source = sample;
+  const playerRef = useRef<any>(null!);
+  const [isPlaying, setIsPlaying] = useState(false);
+  // const playerRef = useRef<any>(null!);
+
+  const toggleStatus = () => {
+    isPlaying ? playerRef.current.pause() : playerRef.current.play();
+    setIsPlaying(prev => !prev);
+  };
 
   return (
     <>
+      <AudioPlayer source={source} playerRef={playerRef} toggleStatus={toggleStatus} />
       <MeshDistortMaterial
         ref={set as any}
         envMap={envMap}
         bumpMap={bumpMap}
-        color={"#082175"}
+        color={"#c50ceb"}
         roughness={0.1}
         metalness={1}
         bumpScale={0.005}
@@ -81,7 +122,7 @@ const Example = (props: MeshProps) => {
         radius={1}
         distort={0.4}
       />
-      {material && <Instances material={material} />}
+      {material && <Instances material={material} playerRef={playerRef} />}
     </>
   );
 };

@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { Html } from "@react-three/drei";
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from "@react-three/postprocessing";
 import Example from "./components/Example";
+import sample from "./sample.mp3";
 
 const AudioImage = () => {
   const dispatch = useAppDispatch();
@@ -29,8 +30,8 @@ const AudioImage = () => {
           depth: false,
         }}
       >
-        <color attach="background" args={["#0c269b"]} />
-        <fog color="#2a14aa" attach="fog" near={8} far={30} />
+        <color attach="background" args={["#c512a7"]} />
+        <fog color="#ab1bcf" attach="fog" near={8} far={30} />
 
         <Suspense fallback={<Html>loading...</Html>}>
           <Example position={[0, 0, 0]} />

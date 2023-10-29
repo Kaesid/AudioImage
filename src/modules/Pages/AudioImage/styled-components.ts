@@ -6,5 +6,14 @@ const VisualPage = styled.div`
   justify-content: center;
   align-items: center;
   height: calc(100vh - ${headerHeight});
+  position: relative;
 `;
-export { VisualPage };
+
+const PlayButton = styled.button`
+  position: absolute;
+  top: 300px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #248ae3;
+`;
+export { VisualPage, PlayButton };
