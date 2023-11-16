@@ -26,16 +26,47 @@ const MainSphere = ({ material, playerRef }: any) => {
   // main sphere rotates following the mouse position
   useFrame(({ clock, mouse }) => {
     if (!main.current.rotation) return;
-    if (analyzer?.current) {
-      const data = analyzer.current.getFrequencyData();
-      console.log(data);
-      main.current.rotation.y = data[5];
-      main.current.rotation.x = data[6];
-    }
-
     main.current.rotation.z = clock.getElapsedTime();
+    if (analyzer?.current) {
+      const number = analyzer.current.getAverageFrequency();
+      const data = analyzer.current.getFrequencyData();
+
+      console.log(material);
+      console.log(number);
+      console.log(data);
+      if (number > 20) {
+        //?WIP
+        // main.current.geometry.parameters.detail = number;
+        // if (main.current?.geometry?.matrixWorld?.elements) {
+        //   main.current.geometry.matrixWorld.elements[0] = number / 100;
+        // }
+        // material._radius.value = number / 50;
+        //decent
+        // material._distort.value = number / 120;
+        // material.color.r = number / 50;
+        // material.color.b = number / 70;
+        // material.color.g = number / 70;
+        // material.metalness = number / 50;
+        // main.current.rotation.x = number / 50;
+        // main.current.rotation.y = number / 20;
+        // main.current.scale.x = number / 55;
+        // main.current.scale.y = number / 40;
+        // main.current.scale.z = number / 45;
+        //
+      } else if (number === 0) {
+        main.current.scale.x = 1;
+        main.current.scale.y = 1;
+        main.current.scale.z = 1;
+        main.current.rotation.x = 0;
+        main.current.rotation.y = 0;
+        material.metalness = 1;
+      }
+
+      // main.current.x = data[5];
+      // main.current.y = data[6];
+    }
   });
-  return <Icosahedron args={[1, 4]} ref={main} material={material} position={[0, 0, 0]} />;
+  return <Icosahedron args={[0.7, 4]} ref={main} material={material} position={[0.2, 0.5, 0]} />;
 };
 
 const Instances = ({ material, playerRef }: any) => {
@@ -79,12 +110,12 @@ const Instances = ({ material, playerRef }: any) => {
   );
 };
 
-const AudioPlayer = ({ source, playerRef, toggleStatus }: any) => {
+const AudioPlayer = ({ source, playerRef, toggleStatus, isPlaying }: any) => {
   return (
     <>
       <PositionalAudio ref={playerRef} url={source} />
       <Html>
-        <PlayButton onClick={toggleStatus}>PLAY</PlayButton>
+        <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
       </Html>
     </>
   );
@@ -108,7 +139,7 @@ const Example = (props: MeshProps) => {
 
   return (
     <>
-      <AudioPlayer source={source} playerRef={playerRef} toggleStatus={toggleStatus} />
+      <AudioPlayer source={source} playerRef={playerRef} toggleStatus={toggleStatus} isPlaying={isPlaying} />
       <MeshDistortMaterial
         ref={set as any}
         envMap={envMap}
