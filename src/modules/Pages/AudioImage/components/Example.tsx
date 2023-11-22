@@ -4,36 +4,25 @@ import { MathUtils, Mesh, TextureLoader, AudioAnalyser } from "three";
 import { canvasImage as backgroundImage } from "../../../../assets/images";
 import { Html, MeshDistortMaterial, Icosahedron, useTexture, useCubeTexture, PositionalAudio } from "@react-three/drei";
 import { nx, ny, nz, px, py, pz } from "../../../../assets/images/cube";
-import sample from "./sample.mp3";
-import { PlayButton } from "../styled-components";
-
-const useAnalyse = ({ playerRef }: any) => {
-  const analyzer = useRef<AudioAnalyser | null>(null);
-
-  useEffect(() => {
-    if (!playerRef?.current) return;
-    analyzer.current = new AudioAnalyser(playerRef.current, 128);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerRef?.current]);
-
-  return { analyzer };
-};
+import { getCurrentTrackData } from "../audioImageSlice";
+import { useAppSelector } from "../../../../redux/hooks";
+import AudioPlayer from "./AudioPlayer/AudioPlayer";
 
 const MainSphere = ({ material, playerRef }: any) => {
   const main = useRef<any>(null!);
-  const { analyzer } = useAnalyse({ playerRef });
+  const trackData = useAppSelector(getCurrentTrackData);
 
   // main sphere rotates following the mouse position
   useFrame(({ clock, mouse }) => {
     if (!main.current.rotation) return;
     main.current.rotation.z = clock.getElapsedTime();
-    if (analyzer?.current) {
-      const number = analyzer.current.getAverageFrequency();
-      const data = analyzer.current.getFrequencyData();
+    if (trackData) {
+      const number = trackData.getAverageFrequency();
+      // const data = analyzer.current.getFrequencyData();
 
       console.log(material);
       console.log(number);
-      console.log(data);
+      // console.log(data);
       if (number > 20) {
         //?WIP
         // main.current.geometry.parameters.detail = number;
@@ -42,16 +31,16 @@ const MainSphere = ({ material, playerRef }: any) => {
         // }
         // material._radius.value = number / 50;
         //decent
-        // material._distort.value = number / 120;
-        // material.color.r = number / 50;
-        // material.color.b = number / 70;
-        // material.color.g = number / 70;
-        // material.metalness = number / 50;
-        // main.current.rotation.x = number / 50;
-        // main.current.rotation.y = number / 20;
-        // main.current.scale.x = number / 55;
-        // main.current.scale.y = number / 40;
-        // main.current.scale.z = number / 45;
+        material._distort.value = number / 120;
+        material.color.r = number / 50;
+        material.color.b = number / 70;
+        material.color.g = number / 70;
+        material.metalness = number / 70;
+        main.current.rotation.x = number / 70;
+        main.current.rotation.y = number / 40;
+        main.current.scale.x = number / 65;
+        main.current.scale.y = number / 40;
+        main.current.scale.z = number / 55;
         //
       } else if (number === 0) {
         main.current.scale.x = 1;
@@ -69,7 +58,7 @@ const MainSphere = ({ material, playerRef }: any) => {
   return <Icosahedron args={[0.7, 4]} ref={main} material={material} position={[0.2, 0.5, 0]} />;
 };
 
-const Instances = ({ material, playerRef }: any) => {
+const Instances = ({ material }: any) => {
   // we use this array ref to store the spheres after creating them
   const [sphereRefs] = useState(() => []);
   // we use this array to initialize the background spheres
@@ -96,7 +85,7 @@ const Instances = ({ material, playerRef }: any) => {
   });
   return (
     <>
-      <MainSphere material={material} playerRef={playerRef} />
+      <MainSphere material={material} />
       {initialPositions.map((pos, i) => (
         <Icosahedron
           args={[1, 4]}
@@ -110,36 +99,16 @@ const Instances = ({ material, playerRef }: any) => {
   );
 };
 
-const AudioPlayer = ({ source, playerRef, toggleStatus, isPlaying }: any) => {
-  return (
-    <>
-      <PositionalAudio ref={playerRef} url={source} />
-      <Html>
-        <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
-      </Html>
-    </>
-  );
-};
-
 const Example = (props: MeshProps) => {
   const bumpMap = useTexture(px);
 
   const envMap = useCubeTexture([px, nx, py, ny, pz, nz], { path: "" });
   // We use `useState` to be able to delay rendering the spheres until the material is ready
   const [material, set] = useState();
-  const source = sample;
-  const playerRef = useRef<any>(null!);
-  const [isPlaying, setIsPlaying] = useState(false);
-  // const playerRef = useRef<any>(null!);
-
-  const toggleStatus = () => {
-    isPlaying ? playerRef.current.pause() : playerRef.current.play();
-    setIsPlaying(prev => !prev);
-  };
 
   return (
     <>
-      <AudioPlayer source={source} playerRef={playerRef} toggleStatus={toggleStatus} isPlaying={isPlaying} />
+      <AudioPlayer />
       <MeshDistortMaterial
         ref={set as any}
         envMap={envMap}
@@ -153,7 +122,7 @@ const Example = (props: MeshProps) => {
         radius={1}
         distort={0.4}
       />
-      {material && <Instances material={material} playerRef={playerRef} />}
+      {material && <Instances material={material} />}
     </>
   );
 };
