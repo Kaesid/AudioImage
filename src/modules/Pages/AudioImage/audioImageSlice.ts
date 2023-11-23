@@ -5,19 +5,19 @@ import { AudioAnalyser } from "three";
 interface IAudioImageState {
   currentTrackData: AudioAnalyser | null;
   tracksList: ITrack[];
-  currentTrack: string;
+  currentTrackUrl: string;
 }
 
 interface ITrack {
   //key?
   name: string;
-  src: string;
+  url: string;
 }
 
 const initialState: IAudioImageState = {
   currentTrackData: null,
   tracksList: [],
-  currentTrack: "",
+  currentTrackUrl: "",
 };
 
 export const audioImageSlice = createSlice({
@@ -28,17 +28,25 @@ export const audioImageSlice = createSlice({
       state.currentTrackData = action.payload;
     },
     setCurrentTrack: (state, action: PayloadAction<string>) => {
-      state.currentTrack = action.payload;
+      state.currentTrackUrl = action.payload;
+    },
+    updateTracksList: (state, action: PayloadAction<File>) => {
+      const file = action.payload;
+      const isTrackExist = Boolean(state.tracksList.find(({ name }) => name === file.name));
+      if (isTrackExist) return;
+      const url = URL.createObjectURL(file);
+      state.currentTrackUrl = url;
+      state.tracksList = [...state.tracksList, { name: file.name, url }];
     },
   },
 });
 
 const getCurrentTrackData = (state: RootState) => state.audioImage.currentTrackData;
 const getTracksList = (state: RootState) => state.audioImage.tracksList;
-const getCurrentTrack = (state: RootState) => state.audioImage.currentTrack;
+const getCurrentTrack = (state: RootState) => state.audioImage.currentTrackUrl;
 const getAudioImageState = (state: RootState) => state.audioImage;
 
-export const { setCurrentTrackData, setCurrentTrack } = audioImageSlice.actions;
+export const { setCurrentTrackData, setCurrentTrack, updateTracksList } = audioImageSlice.actions;
 
 export default audioImageSlice.reducer;
 

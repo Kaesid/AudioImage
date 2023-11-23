@@ -20,8 +20,8 @@ const MainSphere = ({ material, playerRef }: any) => {
       const number = trackData.getAverageFrequency();
       // const data = analyzer.current.getFrequencyData();
 
-      console.log(material);
-      console.log(number);
+      // console.log(material);
+      // console.log(number);
       // console.log(data);
       if (number > 20) {
         //?WIP

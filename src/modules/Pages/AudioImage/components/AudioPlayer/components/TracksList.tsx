@@ -1,18 +1,21 @@
-import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
-import { getTracksList, setCurrentTrack } from "../../../audioImageSlice";
-import { TrackData } from "../styled-components";
+import { AddTrack, TrackData, TrackList, TrackListBox } from "../styled-components";
 
-const TracksList = ({ addFile, tracklist }: any) => {
+const TracksList = ({ addFile, tracklist, setTrackActive, currentTrackUrl }: any) => {
   return (
-    <div>
-      {tracklist.map(({ src, name }: any) => (
-        <TrackData>{name}</TrackData>
-      ))}
-      <div>
+    <TrackList>
+      <TrackListBox>
+        {tracklist.map(({ url, name }: any) => (
+          <TrackData key={name} $isActive={currentTrackUrl === url} onClick={() => setTrackActive(url)}>
+            {name}
+          </TrackData>
+        ))}
+      </TrackListBox>
+
+      <AddTrack>
         <label htmlFor="audio">ADD</label>
         <input id="audio" accept="audio/*" type="file" onChange={addFile} />
-      </div>
-    </div>
+      </AddTrack>
+    </TrackList>
   );
 };
 
