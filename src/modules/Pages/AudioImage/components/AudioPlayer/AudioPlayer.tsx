@@ -14,20 +14,20 @@ import {
 } from "../../audioImageSlice";
 import sample from "../sample.mp3";
 import TracksList from "./components/TracksList";
+import { ControlPanel, HtmlWrap } from "./styled-components";
 
 const AudioPlayer = () => {
   const playerRef = useRef<PositionalAudioType>(null!);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { currentTrackUrl } = useAppSelector(getAudioImageState);
+  const { currentTrackUrl, tracksList } = useAppSelector(getAudioImageState);
   const dispatch = useAppDispatch();
   // const currentTrack = useAppSelector(getCurrentTrack);
 
-  const tracklist = useAppSelector(getTracksList);
+  // const tracklist = useAppSelector(getTracksList);
 
   const addFile = (e: any) => {
     const file = e.target.files[0];
     console.log(file);
-    console.log(URL.createObjectURL(file));
     if (file) {
       dispatch(updateTracksList(file));
     }
@@ -38,27 +38,40 @@ const AudioPlayer = () => {
     setIsPlaying(prev => !prev);
   };
 
+  const changeTrack = (increment: number) => {
+    const currentElemIndex = tracksList.findIndex(({ url }) => currentTrackUrl === url);
+    dispatch(setCurrentTrack(tracksList[(currentElemIndex + increment) % tracksList.length].url));
+  };
+
   const setTrackActive = (url: string) => dispatch(setCurrentTrack(url));
 
   useEffect(() => {
     if (!currentTrackUrl) return;
-    setIsPlaying(false);
     playerRef.current.stop();
+    if (isPlaying) {
+      playerRef.current.play();
+    }
     dispatch(setCurrentTrackData(new AudioAnalyser(playerRef.current, 128)));
   }, [currentTrackUrl]);
 
   return (
     <>
       {currentTrackUrl && <PositionalAudio ref={playerRef} url={currentTrackUrl} />}
-      <Html>
+      <HtmlWrap>
         <TracksList
           addFile={addFile}
-          tracklist={tracklist}
+          tracklist={tracksList}
           currentTrackUrl={currentTrackUrl}
           setTrackActive={setTrackActive}
         />
-        {currentTrackUrl && <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>}
-      </Html>
+        {currentTrackUrl && (
+          <ControlPanel>
+            {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(-1)}>PREV</PlayButton>}
+            <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
+            {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(1)}>NEXT</PlayButton>}
+          </ControlPanel>
+        )}
+      </HtmlWrap>
     </>
   );
 };

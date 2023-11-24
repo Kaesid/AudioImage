@@ -9,7 +9,6 @@ interface IAudioImageState {
 }
 
 interface ITrack {
-  //key?
   name: string;
   url: string;
 }

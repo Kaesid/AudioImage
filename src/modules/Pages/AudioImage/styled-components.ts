@@ -10,8 +10,8 @@ const VisualPage = styled.div`
 `;
 
 const PlayButton = styled.button`
-  position: absolute;
-  top: 300px;
+  /* position: absolute; */
+  /* top: 300px; */
   padding: 8px 12px;
   border-radius: 6px;
   background-color: #248ae3;
