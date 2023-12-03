@@ -1,4 +1,4 @@
-import { AddTrack, TrackData, TrackList, TrackListBox } from "../styled-components";
+import { AddTrack, HiddenInput, InputLabel, TrackData, TrackList, TrackListBox } from "../styled-components";
 
 const TracksList = ({ addFile, tracklist, setTrackActive, currentTrackUrl }: any) => {
   return (
@@ -12,8 +12,8 @@ const TracksList = ({ addFile, tracklist, setTrackActive, currentTrackUrl }: any
       </TrackListBox>
 
       <AddTrack>
-        <label htmlFor="audio">ADD</label>
-        <input id="audio" accept="audio/*" type="file" onChange={addFile} />
+        <InputLabel htmlFor="audio">+</InputLabel>
+        <HiddenInput id="audio" accept="audio/*" type="file" onChange={addFile} />
       </AddTrack>
     </TrackList>
   );
