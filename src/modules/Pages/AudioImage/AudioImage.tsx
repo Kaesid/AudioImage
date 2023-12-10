@@ -2,7 +2,7 @@ import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { VisualPage } from "./styled-components";
 import Visual from "./components/Visual/Visual";
-import { setSessionActive } from "../../../redux/commonSlice";
+import { setSessionActive } from "../../../redux/slice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { Html } from "@react-three/drei";
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from "@react-three/postprocessing";

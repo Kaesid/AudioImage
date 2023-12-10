@@ -9,10 +9,23 @@ import {
   setCurrentTrack,
   setCurrentTrackData,
   updateTracksList,
-} from "../../audioImageSlice";
+} from "../../slice";
 import sample from "../sample.mp3";
 import TracksList from "./components/TracksList";
-import { ControlPanel, ControlPanelButtons, ControlPanelTime, HtmlWrap, PlayButton } from "./styled-components";
+import {
+  AddTrack,
+  ControlPanel,
+  ControlPanelButtons,
+  ControlPanelTime,
+  ControlTrackButtons,
+  HiddenInput,
+  HtmlWrap,
+  InputLabel,
+  PlayButton,
+  TrackData,
+  TrackList,
+  TrackListBox,
+} from "./styled-components";
 import { getDisplayedTime } from "./helpers";
 
 const AudioPlayer = () => {
@@ -64,7 +77,7 @@ const AudioPlayer = () => {
     }
     const interval = setInterval(() => {
       setDisplayedTime(oldTime => {
-        if (oldTime < duration - 1) return oldTime + 1;
+        if (oldTime < duration - 2) return oldTime + 1;
         // clearInterval(interval);
         return -1;
       });
@@ -78,32 +91,68 @@ const AudioPlayer = () => {
     if (displayedTime === -1) changeTrack(1);
   }, [displayedTime]);
 
+  const setRefDistance = (increment: number) => {
+    let number = playerRef.current.getRefDistance() + increment;
+    if (number > 100) number = 100;
+    if (number < 0) number = 0;
+    playerRef.current.setRefDistance(number);
+    // playerRef.current.setDirectionalCone(increment, increment, increment);
+  };
+
   return (
     <>
       {currentTrackUrl && <PositionalAudio ref={playerRef} url={currentTrackUrl} />}
       <HtmlWrap>
-        <TracksList
+        {/* <TracksList
           addFile={addFile}
           tracklist={tracksList}
           currentTrackUrl={currentTrackUrl}
           setTrackActive={setTrackActive}
-        />
-        {currentTrackUrl && (
-          <ControlPanel>
-            {playerRef.current && (
-              <ControlPanelTime>
-                <span>{getDisplayedTime(displayedTime)}</span>
-                <span>/</span>
-                <span>{getDisplayedTime(duration)}</span>
-              </ControlPanelTime>
+        /> */}
+        <TrackList>
+          <TrackListBox>
+            {tracksList.map(({ url, name }: any) => (
+              <TrackData key={name} $isActive={currentTrackUrl === url} onClick={() => setTrackActive(url)}>
+                {name}
+              </TrackData>
+            ))}
+          </TrackListBox>
+          <ControlPanelButtons>
+            {currentTrackUrl && (
+              <ControlPanel>
+                {playerRef.current && (
+                  <ControlPanelTime>
+                    <span>{getDisplayedTime(displayedTime)}</span>
+                    <span>/</span>
+                    <span>{getDisplayedTime(duration)}</span>
+                  </ControlPanelTime>
+                )}
+                <ControlTrackButtons>
+                  {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(-1)}>PREV</PlayButton>}
+                  <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
+                  {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(1)}>NEXT</PlayButton>}
+
+                  {/* <PlayButton onClick={() => setRefDistance(+1)}>+</PlayButton> */}
+                  {/* <PlayButton onClick={() => setRefDistance(-1)}>-</PlayButton> */}
+                </ControlTrackButtons>
+              </ControlPanel>
             )}
-            <ControlPanelButtons>
-              {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(-1)}>PREV</PlayButton>}
-              <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
-              {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(1)}>NEXT</PlayButton>}
-            </ControlPanelButtons>
-          </ControlPanel>
-        )}
+            <AddTrack>
+              <InputLabel htmlFor="audio">+</InputLabel>
+              <HiddenInput id="audio" accept="audio/*" type="file" onChange={addFile} />
+            </AddTrack>
+          </ControlPanelButtons>
+          <div>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="20"
+              id="myRange"
+              onChange={event => playerRef.current.setRefDistance(Math.trunc(Number(event.target.value)))}
+            />
+          </div>
+        </TrackList>
       </HtmlWrap>
     </>
   );

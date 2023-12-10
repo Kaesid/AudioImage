@@ -1,29 +1,37 @@
 import { Html } from "@react-three/drei";
 import styled, { css } from "styled-components";
+import { defaultScrollBarStyles } from "../../../../../styles/styled-components/helpers";
 
 const HtmlWrap = styled(Html)``;
 
+const trackListHeight = 300;
+
 const TrackList = styled.div`
   position: absolute;
-  left: 80px;
-  top: 200px;
+  right: 1px;
+  bottom: 21px;
+  transform: translate3d(50vw, 50vh, 0px);
   padding: 10px;
   background: white;
-  min-height: 200px;
+  height: ${trackListHeight + 20}px;
+  width: min(350px, 100vw);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border: 2px solid black;
+  border-radius: 12px;
 `;
 
 const TrackListBox = styled.div`
-  margin-bottom: 20px;
-  max-height: 200px;
+  margin-bottom: 10px;
+  height: ${trackListHeight}px;
   overflow-y: auto;
+  ${defaultScrollBarStyles}
 `;
 
 const TrackData = styled.div`
   cursor: pointer;
-  max-width: 300px;
+  max-width: 100%;
   text-overflow: ellipsis;
   overflow-x: hidden;
   border: 1px solid black;
@@ -38,8 +46,9 @@ const TrackData = styled.div`
 `;
 
 const AddTrack = styled.div`
-  display: flex;
-  gap: 5px;
+  &:only-child {
+    margin-left: auto;
+  }
 `;
 
 const ControlPanel = styled.div`
@@ -48,14 +57,10 @@ const ControlPanel = styled.div`
   justify-content: center;
   align-items: center;
   background: transparent;
-  position: absolute;
-  top: 300px;
-  left: -150px;
   gap: 8px;
 `;
 
 const ControlPanelTime = styled.div`
-  color: white;
   display: flex;
   gap: 4px;
 `;
@@ -63,24 +68,30 @@ const ControlPanelTime = styled.div`
 const ControlPanelButtons = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+`;
+
+const ControlTrackButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
 `;
 
 const HiddenInput = styled.input`
-  visibility: hidden;
+  display: none;
 `;
 
 const InputLabel = styled.label`
-  /* padding: 4px; */
-  font-size: 35px;
+  font-size: 29px;
   background-color: purple;
   color: white;
   display: flex;
   justify-content: center;
   align-items: baseline;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 8px;
   box-shadow: 5px 6px 3px 1px #0000001f;
 
@@ -88,9 +99,8 @@ const InputLabel = styled.label`
 `;
 
 const PlayButton = styled.button`
-  /* position: absolute; */
-  /* top: 300px; */
   padding: 8px 12px;
+  min-width: 70px;
   border-radius: 6px;
   background-color: purple;
   color: white;
@@ -109,4 +119,5 @@ export {
   ControlPanelTime,
   ControlPanelButtons,
   PlayButton,
+  ControlTrackButtons,
 };

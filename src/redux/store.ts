@@ -1,8 +1,8 @@
 import createSagaMiddleware from "redux-saga";
 import { configureStore } from "@reduxjs/toolkit";
 import rootSaga from "./sagas";
-import commonSlice from "./commonSlice";
-import audioImageSlice from "../modules/Pages/AudioImage/audioImageSlice";
+import commonSlice from "./slice";
+import audioImageSlice from "../modules/Pages/AudioImage/slice";
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({

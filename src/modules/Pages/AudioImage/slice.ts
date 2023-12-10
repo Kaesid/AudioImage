@@ -34,7 +34,8 @@ export const audioImageSlice = createSlice({
       const isTrackExist = Boolean(state.tracksList.find(({ name }) => name === file.name));
       if (isTrackExist) return;
       const url = URL.createObjectURL(file);
-      state.currentTrackUrl = url;
+      if (!state.currentTrackUrl) state.currentTrackUrl = url;
+
       state.tracksList = [...state.tracksList, { name: file.name, url }];
     },
   },

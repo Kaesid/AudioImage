@@ -5,7 +5,7 @@ import { redirectToCanvasActionName } from "./constants";
 import { canvasImage } from "../../../assets/images";
 import { ButtonWrap, RedirectButton } from "./styled-components";
 import { appName, Messages } from "../../../constants/text";
-import { getIsSessionActive } from "../../../redux/commonSlice";
+import { getIsSessionActive } from "../../../redux/slice";
 
 const Home = () => {
   const navigate = useNavigate();

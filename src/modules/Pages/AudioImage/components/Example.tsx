@@ -4,7 +4,7 @@ import { MathUtils, Mesh, TextureLoader, AudioAnalyser } from "three";
 import { canvasImage as backgroundImage } from "../../../../assets/images";
 import { Html, MeshDistortMaterial, Icosahedron, useTexture, useCubeTexture, PositionalAudio } from "@react-three/drei";
 import { nx, ny, nz, px, py, pz } from "../../../../assets/images/cube";
-import { getCurrentTrackData } from "../audioImageSlice";
+import { getCurrentTrackData } from "../slice";
 import { useAppSelector } from "../../../../redux/hooks";
 import AudioPlayer from "./AudioPlayer/AudioPlayer";
 
