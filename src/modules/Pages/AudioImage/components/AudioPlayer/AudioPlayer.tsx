@@ -14,6 +14,7 @@ import sample from "../sample.mp3";
 import TracksList from "./components/TracksList";
 import {
   AddTrack,
+  AppName,
   ControlPanel,
   ControlPanelButtons,
   ControlPanelTime,
@@ -22,16 +23,23 @@ import {
   HtmlWrap,
   InputLabel,
   PlayButton,
+  PlayerTopContent,
   TrackData,
   TrackList,
   TrackListBox,
+  TrackListTrigger,
+  VolumeInput,
 } from "./styled-components";
 import { getDisplayedTime } from "./helpers";
+import { appName } from "../../../../../constants/text";
+import Collapsible from "react-collapsible";
+import { IconDown } from "../../../../../assets/images/svgrepo";
 
 const AudioPlayer = () => {
   const playerRef = useRef<PositionalAudioType>(null!);
   const [isPlaying, setIsPlaying] = useState(false);
   const [displayedTime, setDisplayedTime] = useState(0);
+  const [isTrackListVisible, setIsTrackListVisible] = useState(true);
   const { currentTrackUrl, tracksList } = useAppSelector(getAudioImageState);
   const dispatch = useAppDispatch();
   const duration = Math.trunc(playerRef.current?.buffer?.duration || 0);
@@ -91,32 +99,43 @@ const AudioPlayer = () => {
     if (displayedTime === -1) changeTrack(1);
   }, [displayedTime]);
 
-  const setRefDistance = (increment: number) => {
-    let number = playerRef.current.getRefDistance() + increment;
-    if (number > 100) number = 100;
-    if (number < 0) number = 0;
-    playerRef.current.setRefDistance(number);
-    // playerRef.current.setDirectionalCone(increment, increment, increment);
-  };
-
   return (
     <>
       {currentTrackUrl && <PositionalAudio ref={playerRef} url={currentTrackUrl} />}
       <HtmlWrap>
-        {/* <TracksList
-          addFile={addFile}
-          tracklist={tracksList}
-          currentTrackUrl={currentTrackUrl}
-          setTrackActive={setTrackActive}
-        /> */}
         <TrackList>
-          <TrackListBox>
-            {tracksList.map(({ url, name }: any) => (
-              <TrackData key={name} $isActive={currentTrackUrl === url} onClick={() => setTrackActive(url)}>
-                {name}
-              </TrackData>
-            ))}
-          </TrackListBox>
+          <PlayerTopContent>
+            <AppName>{appName}</AppName>
+            <AddTrack>
+              <InputLabel htmlFor="audio">+</InputLabel>
+              <HiddenInput id="audio" accept="audio/*" type="file" onChange={addFile} />
+            </AddTrack>
+          </PlayerTopContent>
+          {playerRef.current && (
+            <Collapsible
+              contentElementId="content"
+              overflowWhenOpen="auto"
+              open={isTrackListVisible}
+              onOpening={() => setIsTrackListVisible(true)}
+              onClosing={() => setIsTrackListVisible(false)}
+              trigger={
+                <TrackListTrigger $isOpen={isTrackListVisible}>
+                  <div>
+                    <p>Tracklist</p> <IconDown />
+                  </div>
+                </TrackListTrigger>
+              }
+            >
+              <TrackListBox>
+                {tracksList.map(({ url, name }: any) => (
+                  <TrackData key={name} $isActive={currentTrackUrl === url} onClick={() => setTrackActive(url)}>
+                    {name}
+                  </TrackData>
+                ))}
+              </TrackListBox>
+            </Collapsible>
+          )}
+
           <ControlPanelButtons>
             {currentTrackUrl && (
               <ControlPanel>
@@ -131,27 +150,23 @@ const AudioPlayer = () => {
                   {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(-1)}>PREV</PlayButton>}
                   <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
                   {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(1)}>NEXT</PlayButton>}
-
-                  {/* <PlayButton onClick={() => setRefDistance(+1)}>+</PlayButton> */}
-                  {/* <PlayButton onClick={() => setRefDistance(-1)}>-</PlayButton> */}
                 </ControlTrackButtons>
               </ControlPanel>
             )}
-            <AddTrack>
-              <InputLabel htmlFor="audio">+</InputLabel>
-              <HiddenInput id="audio" accept="audio/*" type="file" onChange={addFile} />
-            </AddTrack>
+            {playerRef.current && (
+              <VolumeInput>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  defaultValue={0.8}
+                  id="myRange"
+                  onChange={event => playerRef.current.setVolume(Number(event.target.value))}
+                />
+              </VolumeInput>
+            )}
           </ControlPanelButtons>
-          <div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              defaultValue="20"
-              id="myRange"
-              onChange={event => playerRef.current.setRefDistance(Math.trunc(Number(event.target.value)))}
-            />
-          </div>
         </TrackList>
       </HtmlWrap>
     </>
