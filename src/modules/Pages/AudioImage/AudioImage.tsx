@@ -4,10 +4,9 @@ import { VisualPage } from "./styled-components";
 import Visual from "./components/Visual/Visual";
 import { setSessionActive } from "../../../redux/slice";
 import { useAppDispatch } from "../../../redux/hooks";
-import { Html, OrbitControls, PointerLockControls } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from "@react-three/postprocessing";
 import Example from "./components/Example";
-import sample from "./sample.mp3";
 import { useMobileResolutionCheck } from "../../../hooks/useMobileResolutionCheck";
 
 const AudioImage = () => {
@@ -24,23 +23,17 @@ const AudioImage = () => {
     <VisualPage>
       <Canvas
         camera={{ position: [0, 0, isMobile ? 6 : 4] }}
-        // camera={{
-        //   position: [1, 1, 2],
-        //   fov: 75,
-        //   near: 0.1,
-        //   far: 100,
-        // }}
         gl={{
           powerPreference: "high-performance",
           alpha: false,
           antialias: false,
           stencil: false,
-          depth: false,
+          depth: true,
         }}
       >
         <color attach="background" args={["#1a032f"]} />
         <fog color="#1a0d27" attach="fog" near={8} far={30} />
-        <Suspense fallback={<Html>loading...</Html>}>
+        <Suspense fallback={<Html>Loading...</Html>}>
           <Example position={[0, 0, 0]} />
         </Suspense>
         <EffectComposer multisampling={0} disableNormalPass={true}>

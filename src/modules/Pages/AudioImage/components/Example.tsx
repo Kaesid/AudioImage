@@ -19,60 +19,43 @@ import {
   Vector3,
 } from "three";
 import { canvasImage as backgroundImage } from "../../../../assets/images";
-import { Html, MeshDistortMaterial, Icosahedron, useTexture, useCubeTexture, PositionalAudio } from "@react-three/drei";
+import {
+  Html,
+  MeshDistortMaterial,
+  Icosahedron,
+  useTexture,
+  useCubeTexture,
+  PositionalAudio,
+  Trail,
+  GradientTexture,
+} from "@react-three/drei";
 import { nx, ny, nz, px, py, pz } from "../../../../assets/images/cube";
 import { getCurrentTrackData } from "../slice";
 import { useAppSelector } from "../../../../redux/hooks";
 import AudioPlayer from "./AudioPlayer/AudioPlayer";
 
-const MainSphere = ({ material, playerRef }: any) => {
+const MainSphere = ({ material }: any) => {
   const main = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null!);
   const trackData = useAppSelector(getCurrentTrackData);
 
-  // main sphere rotates following the mouse position
-  useFrame(({ clock, mouse }) => {
+  useFrame(({ clock }) => {
     if (!main.current.rotation) return;
     const time = clock.getElapsedTime();
     main.current.rotation.z = time * 3;
+
     if (trackData) {
       const number = trackData.getAverageFrequency();
-      // const data = analyzer.current.getFrequencyData();
 
-      // console.log(material);
-      // console.log(number);
-      // console.log(data);
       if (number > 20) {
-        //?WIP
-        // main.current.geometry.parameters.detail = number;
-        // if (main.current?.geometry?.matrixWorld?.elements) {
-        //   main.current.geometry.matrixWorld.elements[0] = number / 100;
-        // }
-        // material._radius.value = number / 50;
-        //decent
-        // main.current.position.setZ(number / 50);
-        // main.current.position.setX(number / 30);
-        // main.current.position.setY(number / 40);
-        // main.current.rotation.z -= number / 10;
+        const data = trackData.getFrequencyData();
         material._distort.value = Math.min(number / 120, 0.4);
-        const colors = ["r", "g", "b"];
-        const rand = Math.floor(Math.random() * 3);
-        const color = colors[rand];
-        console.log(number);
-        material.color[color] = Math.min(number / 80, 0.7);
-        // material.color[color] = number / 100;
-        // material.color.r = Math.max(number / 40, 0.2);
-        // material.color.b = Math.max(number / 90, 0.5);
-        // material.color.g = Math.max(number / 70, 0.3);
-        material.metalness = number / 70;
+        material.color.r = data[Math.floor(Math.random() * 6)] / 300;
+        material.metalness = number / 40;
         main.current.rotation.x = time + number / 70;
         main.current.rotation.y = time + number / 40;
         main.current.scale.x = Math.min(number / 65, 4);
         main.current.scale.y = Math.min(number / 40, 6);
         main.current.scale.z = Math.min(number / 55, 8);
-        // main.current.lookAt(new Vector3(number / 20, number / 40, number / 50));
-        // main.current.translateZ(number / 40);
-        // main.current.
-        //
       } else if (number === 0) {
         main.current.scale.x = 1;
         main.current.scale.y = 1;
@@ -80,10 +63,8 @@ const MainSphere = ({ material, playerRef }: any) => {
         main.current.rotation.x = 0;
         main.current.rotation.y = 0;
         material.metalness = 1;
+        material.color.r = 0.4;
       }
-
-      // main.current.x = data[5];
-      // main.current.y = data[6];
     }
   });
   return <Icosahedron args={[0.7, 4]} ref={main} material={material} position={[0.2, 0.5, 0]} />;
@@ -135,7 +116,7 @@ const Example = (props: MeshProps) => {
 
   const envMap = useCubeTexture([px, nx, py, ny, pz, nz], { path: "" });
   // We use `useState` to be able to delay rendering the spheres until the material is ready
-  const [material, set] = useState();
+  const [material, set] = useState(null!);
 
   return (
     <>
