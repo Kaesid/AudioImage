@@ -112,20 +112,20 @@ const Instances = ({ material }: any) => {
 };
 
 const Example = (props: MeshProps) => {
-  const bumpMap = useTexture(px);
+  const bumpMap = useTexture(nx);
 
   const envMap = useCubeTexture([px, nx, py, ny, pz, nz], { path: "" });
   // We use `useState` to be able to delay rendering the spheres until the material is ready
-  const [material, set] = useState(null!);
+  const [material, setMaterial] = useState(null!);
 
   return (
     <>
       <AudioPlayer />
       <MeshDistortMaterial
-        ref={set as any}
+        ref={setMaterial as any}
         envMap={envMap}
         bumpMap={bumpMap}
-        color={"#aa6db5"}
+        color={"#a765a7"}
         roughness={0.1}
         metalness={1}
         bumpScale={0.005}

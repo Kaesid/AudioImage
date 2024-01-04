@@ -22,7 +22,7 @@ const TrackList = styled.div`
   border-radius: 12px;
 
   #content {
-    max-height: 170px;
+    max-height: 150px;
     overflow-y: auto;
     ${defaultScrollBarStyles}
     margin-bottom: 10px;
@@ -112,6 +112,7 @@ const PlayButton = styled.button`
   background-color: purple;
   color: white;
   box-shadow: 5px 6px 3px 1px #0000001f;
+  cursor: pointer;
 `;
 
 const VolumeInput = styled.div`
@@ -162,11 +163,14 @@ const TrackListTrigger = styled.div`
     }
 
     svg {
-      fill: white;
       width: 16px;
       height: 16px;
       object-fit: contain;
       transform: rotate(180deg);
+
+      g {
+        fill: white;
+      }
     }
 
     ${(props: { $isOpen: boolean }) =>

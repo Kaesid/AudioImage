@@ -39,6 +39,7 @@ const AudioPlayer = () => {
   const playerRef = useRef<PositionalAudioType>(null!);
   const [isPlaying, setIsPlaying] = useState(false);
   const [displayedTime, setDisplayedTime] = useState(0);
+  const displayedTimeRef = useRef(0);
   const [isTrackListVisible, setIsTrackListVisible] = useState(true);
   const { currentTrackUrl, tracksList } = useAppSelector(getAudioImageState);
   const dispatch = useAppDispatch();
@@ -62,11 +63,29 @@ const AudioPlayer = () => {
   };
 
   const changeTrack = (increment: number) => {
+    console.log(tracksList);
     const currentElemIndex = tracksList.findIndex(({ url }) => currentTrackUrl === url);
-    dispatch(setCurrentTrack(tracksList[(currentElemIndex + increment) % tracksList.length].url));
+
+    console.log(currentElemIndex);
+
+    if (tracksList.length > 1) {
+      const nextIndex = (currentElemIndex + increment) % tracksList.length;
+
+      console.log(tracksList);
+      console.log(nextIndex);
+      dispatch(setCurrentTrack(tracksList[nextIndex].url));
+    } else {
+      playerRef.current.play();
+    }
   };
 
   const setTrackActive = (url: string) => dispatch(setCurrentTrack(url));
+
+  const setProgress = () => {
+    const progress = Math.trunc((playerRef.current as any)._progress);
+    displayedTimeRef.current = progress;
+    setDisplayedTime(progress);
+  };
 
   useEffect(() => {
     if (!currentTrackUrl) return;
@@ -75,20 +94,35 @@ const AudioPlayer = () => {
       playerRef.current.play();
     }
     dispatch(setCurrentTrackData(new AudioAnalyser(playerRef.current, 128)));
-    setDisplayedTime(Math.trunc((playerRef.current as any)._progress));
+    setProgress();
   }, [currentTrackUrl]);
 
   useEffect(() => {
     if (!isPlaying) {
-      if (playerRef.current) setDisplayedTime(Math.trunc((playerRef.current as any)._progress));
+      if (playerRef.current) {
+        setProgress();
+      }
       return;
     }
     const interval = setInterval(() => {
-      setDisplayedTime(oldTime => {
-        if (oldTime < duration - 2) return oldTime + 1;
-        // clearInterval(interval);
-        return -1;
-      });
+      const duration = playerRef.current?.buffer?.duration;
+      console.log(duration);
+      console.log(displayedTimeRef.current);
+      if (duration) {
+        if (displayedTimeRef.current < duration - 1) {
+          displayedTimeRef.current += 1;
+          setDisplayedTime(displayedTimeRef.current);
+        } else {
+          playerRef.current.stop();
+          setDisplayedTime(-1);
+          // changeTrack(1);
+        }
+      }
+      // setDisplayedTime(oldTime => {
+      //   if (oldTime < duration - 2) return oldTime + 1;
+      //   // clearInterval(interval);
+      //   return -1;
+      // });
     }, 1000);
     return () => {
       clearInterval(interval);
@@ -96,7 +130,10 @@ const AudioPlayer = () => {
   }, [isPlaying]);
 
   useEffect(() => {
-    if (displayedTime === -1) changeTrack(1);
+    if (displayedTime === -1) {
+      setProgress();
+      changeTrack(1);
+    }
   }, [displayedTime]);
 
   return (
