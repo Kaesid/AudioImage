@@ -1,13 +1,13 @@
 import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { VisualPage } from "./styled-components";
-import Visual from "./components/Visual/Visual";
 import { setSessionActive } from "../../../redux/slice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { Html } from "@react-three/drei";
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from "@react-three/postprocessing";
-import Example from "./components/Example";
 import { useMobileResolutionCheck } from "../../../hooks/useMobileResolutionCheck";
+import AudioPlayer from "./components/AudioPlayer";
+import AudioVisualiser from "./components/AudioVisualiser";
 
 const AudioImage = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +34,8 @@ const AudioImage = () => {
         <color attach="background" args={["#1a032f"]} />
         <fog color="#1a0d27" attach="fog" near={8} far={30} />
         <Suspense fallback={<Html>Loading...</Html>}>
-          <Example position={[0, 0, 0]} />
+          <AudioPlayer />
+          <AudioVisualiser />
         </Suspense>
         <EffectComposer multisampling={0} disableNormalPass={true}>
           <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />

@@ -1,17 +1,9 @@
-import { Html, PositionalAudio } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
+import { PositionalAudio } from "@react-three/drei";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { AudioAnalyser, PositionalAudio as PositionalAudioType } from "three";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
-import {
-  getAudioImageState,
-  getCurrentTrack,
-  getTracksList,
-  setCurrentTrack,
-  setCurrentTrackData,
-  updateTracksList,
-} from "../../slice";
-import sample from "../sample.mp3";
-import TracksList from "./components/TracksList";
+import { getAudioImageState, setCurrentTrack, setCurrentTrackData, updateTracksList } from "../../slice";
+
 import {
   AddTrack,
   AppName,
@@ -35,8 +27,12 @@ import { appName } from "../../../../../constants/text";
 import Collapsible from "react-collapsible";
 import { IconDown } from "../../../../../assets/images/svgrepo";
 
+interface IPositionalAudioType extends PositionalAudioType {
+  _progress: number;
+}
+
 const AudioPlayer = () => {
-  const playerRef = useRef<PositionalAudioType>(null!);
+  const playerRef = useRef<IPositionalAudioType>(null!);
   const [isPlaying, setIsPlaying] = useState(false);
   const [displayedTime, setDisplayedTime] = useState(0);
   const displayedTimeRef = useRef(0);
@@ -45,16 +41,13 @@ const AudioPlayer = () => {
   const dispatch = useAppDispatch();
   const duration = Math.trunc(playerRef.current?.buffer?.duration || 0);
 
-  // const currentTrack = useAppSelector(getCurrentTrack);
+  const addFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
 
-  // const tracklist = useAppSelector(getTracksList);
+    const file = files[0];
 
-  const addFile = (e: any) => {
-    const file = e.target.files[0];
-    console.log(file);
-    if (file) {
-      dispatch(updateTracksList(file));
-    }
+    if (file) dispatch(updateTracksList(file));
   };
 
   const toggleStatus = () => {
@@ -63,16 +56,10 @@ const AudioPlayer = () => {
   };
 
   const changeTrack = (increment: number) => {
-    console.log(tracksList);
     const currentElemIndex = tracksList.findIndex(({ url }) => currentTrackUrl === url);
-
-    console.log(currentElemIndex);
 
     if (tracksList.length > 1) {
       const nextIndex = (currentElemIndex + increment) % tracksList.length;
-
-      console.log(tracksList);
-      console.log(nextIndex);
       dispatch(setCurrentTrack(tracksList[nextIndex].url));
     } else {
       playerRef.current.play();
@@ -82,7 +69,7 @@ const AudioPlayer = () => {
   const setTrackActive = (url: string) => dispatch(setCurrentTrack(url));
 
   const setProgress = () => {
-    const progress = Math.trunc((playerRef.current as any)._progress);
+    const progress = Math.trunc(playerRef.current._progress);
     displayedTimeRef.current = progress;
     setDisplayedTime(progress);
   };
@@ -115,14 +102,8 @@ const AudioPlayer = () => {
         } else {
           playerRef.current.stop();
           setDisplayedTime(-1);
-          // changeTrack(1);
         }
       }
-      // setDisplayedTime(oldTime => {
-      //   if (oldTime < duration - 2) return oldTime + 1;
-      //   // clearInterval(interval);
-      //   return -1;
-      // });
     }, 1000);
     return () => {
       clearInterval(interval);
@@ -164,7 +145,7 @@ const AudioPlayer = () => {
               }
             >
               <TrackListBox>
-                {tracksList.map(({ url, name }: any) => (
+                {tracksList.map(({ url, name }) => (
                   <TrackData key={name} $isActive={currentTrackUrl === url} onClick={() => setTrackActive(url)}>
                     {name}
                   </TrackData>
