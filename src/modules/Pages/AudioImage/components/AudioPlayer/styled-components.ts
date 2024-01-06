@@ -1,8 +1,5 @@
-import { Html } from "@react-three/drei";
 import styled, { css } from "styled-components";
 import { defaultScrollBarStyles } from "../../../../../styles/styled-components/helpers";
-
-const HtmlWrap = styled(Html)``;
 
 const trackListHeight = 300;
 
@@ -175,7 +172,6 @@ const TrackListTrigger = styled.div`
 export {
   TrackData,
   TrackList,
-  HtmlWrap,
   ControlPanel,
   HiddenInput,
   InputLabel,

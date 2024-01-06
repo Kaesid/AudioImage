@@ -28,7 +28,7 @@ const BasicText = styled.p`
 `;
 
 const GradientTitle = styled(BasicTitle)`
-  background: -webkit-linear-gradient(#43bd9d, #264fab);
+  background: linear-gradient(#ca2ff6, #8aa4df);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

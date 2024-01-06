@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { DefaultOnePager, GradientTitle, PageSizeImageWrap } from "../../../styles/styled-components/basic";
+import { DefaultOnePager, GradientTitle } from "../../../styles/styled-components/basic";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { redirectToCanvasActionName } from "./constants";
-import { canvasImage } from "../../../assets/images";
 import { ButtonWrap, RedirectButton } from "./styled-components";
 import { appName, Messages } from "../../../constants/text";
 import { getIsSessionActive } from "../../../redux/slice";
@@ -21,9 +20,6 @@ const Home = () => {
           {isSessionActive ? Messages.HOME__BUTTON_TEXT_ACTIVE : Messages.HOME__BUTTON_TEXT}
         </RedirectButton>
       </ButtonWrap>
-      <PageSizeImageWrap>
-        <img src={canvasImage} alt="canvas" />
-      </PageSizeImageWrap>
     </DefaultOnePager>
   );
 };

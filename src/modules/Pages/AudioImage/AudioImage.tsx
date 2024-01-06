@@ -22,6 +22,7 @@ const AudioImage = () => {
   return (
     <VisualPage>
       <Canvas
+        data-testid="canvas"
         camera={{ position: [0, 0, isMobile ? 6 : 4] }}
         gl={{
           powerPreference: "high-performance",

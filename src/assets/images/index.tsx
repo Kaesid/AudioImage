@@ -1,6 +1,5 @@
-import canvasImage from "./canvas.png";
 import noMatchImage from "./lost.jpg";
-import backgroundImage from "./bg.png";
+import backgroundImage from "./bg.jpg";
 import { ReactComponent as Logo } from "./logo.svg";
 
-export { canvasImage, noMatchImage, backgroundImage, Logo };
+export { noMatchImage, backgroundImage, Logo };

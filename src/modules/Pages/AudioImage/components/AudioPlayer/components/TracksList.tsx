@@ -2,8 +2,7 @@ import { useState } from "react";
 import { TrackData, TrackListTrigger } from "../styled-components";
 import Collapsible from "react-collapsible";
 import { IconDown } from "../../../../../../assets/images/svgrepo";
-import { IAudioImageState } from "../../../types";
-import { ITrackListProps, SetTrackActive } from "../types";
+import { ITrackListProps } from "../types";
 
 const TracksList = ({ tracksList, setTrackActive, currentTrackUrl }: ITrackListProps) => {
   const [isTrackListVisible, setIsTrackListVisible] = useState(true);

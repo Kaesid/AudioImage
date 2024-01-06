@@ -68,7 +68,7 @@ const GlobalStyleOverflow = createGlobalStyle`
 
 const BurgerMenu = styled.div`
   position: absolute;
-  z-index: 100;
+  z-index: 16711834;
   right: 0;
   top: ${headerHeight};
   width: 100%;

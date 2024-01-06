@@ -48,3 +48,17 @@ test("rendering a chosen page", () => {
 
   expect(screen.getByText(Messages.ABOUT__PARTING_WORDS)).toBeInTheDocument();
 });
+
+test("canvas check", () => {
+  const route = RoutesPath.MAIN_SCENARIO;
+
+  render(
+    <MemoryRouter initialEntries={[route]}>
+      <Provider store={store}>
+        <PageContent />
+      </Provider>
+    </MemoryRouter>
+  );
+
+  expect(screen.getByTestId("canvas")).toBeInTheDocument();
+});

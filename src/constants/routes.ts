@@ -21,7 +21,7 @@ const mappedRouterPaths: IRoute[] = [
   },
   {
     path: RoutesPath.MAIN_SCENARIO,
-    text: "Visual",
+    text: "Visualiser",
     Component: AudioImage,
   },
 ];

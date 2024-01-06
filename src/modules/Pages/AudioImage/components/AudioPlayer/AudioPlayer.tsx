@@ -1,11 +1,10 @@
-import { PositionalAudio } from "@react-three/drei";
+import { Html, PositionalAudio } from "@react-three/drei";
 import { appName } from "../../../../../constants/text";
 import {
   AppName,
   ControlPanel,
   ControlPanelButtons,
   ControlTrackButtons,
-  HtmlWrap,
   PlayButton,
   PlayerTopContent,
   TrackList,
@@ -31,7 +30,7 @@ const AudioPlayer = () => {
   return (
     <>
       {currentTrackUrl && <PositionalAudio ref={playerRef} url={currentTrackUrl} />}
-      <HtmlWrap>
+      <Html>
         <TrackList>
           <PlayerTopContent>
             <AppName>{appName}</AppName>
@@ -54,7 +53,7 @@ const AudioPlayer = () => {
             {playerRef.current && <VolumeControl onVolumeChange={onVolumeChange} />}
           </ControlPanelButtons>
         </TrackList>
-      </HtmlWrap>
+      </Html>
     </>
   );
 };

@@ -52,7 +52,7 @@ const useAudioControl = () => {
     }
 
     dispatch(setCurrentTrackData(new AudioAnalyser(playerRef.current, 128)));
-    setProgress();
+    setProgress(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTrackUrl]);
 
   useEffect(() => {
