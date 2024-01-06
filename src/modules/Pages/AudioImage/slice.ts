@@ -1,17 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../redux/store";
 import { AudioAnalyser } from "three";
-
-interface IAudioImageState {
-  currentTrackData: AudioAnalyser | null;
-  tracksList: ITrack[];
-  currentTrackUrl: string;
-}
-
-interface ITrack {
-  name: string;
-  url: string;
-}
+import { IAudioImageState } from "./types";
 
 const initialState: IAudioImageState = {
   currentTrackData: null,

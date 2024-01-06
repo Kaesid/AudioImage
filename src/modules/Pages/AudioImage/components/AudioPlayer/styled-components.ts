@@ -29,11 +29,6 @@ const TrackList = styled.div`
   }
 `;
 
-const TrackListBox = styled.div`
-  /* max-height: ${trackListHeight}px; */
-  /* overflow-y: auto; */
-`;
-
 const TrackData = styled.div`
   cursor: pointer;
   max-width: 100%;
@@ -49,12 +44,6 @@ const TrackData = styled.div`
       cursor: default;
       color: red;
     `}
-`;
-
-const AddTrack = styled.div`
-  &:only-child {
-    /* margin-left: auto; */
-  }
 `;
 
 const ControlPanel = styled.div`
@@ -186,8 +175,6 @@ const TrackListTrigger = styled.div`
 export {
   TrackData,
   TrackList,
-  TrackListBox,
-  AddTrack,
   HtmlWrap,
   ControlPanel,
   HiddenInput,
