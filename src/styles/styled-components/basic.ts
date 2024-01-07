@@ -35,11 +35,20 @@ const GradientTitle = styled(BasicTitle)`
 `;
 
 const DefaultOnePager = styled.div`
-  background-color: #e7e7cb;
+  background-color: #6674e1;
   height: calc(100vh - ${headerHeight});
   background-image: url(${backgroundImage});
   background-repeat: no-repeat;
   background-size: cover;
 `;
 
-export { PageSizeImageWrap, BasicTitle, GradientTitle, DefaultOnePager, BasicText };
+const CaptionTextWrap = styled.div`
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 40px max(10%, 20px);
+  background-color: #7e42e5c2;
+  color: white;
+  border-radius: 16px;
+`;
+
+export { PageSizeImageWrap, BasicTitle, GradientTitle, DefaultOnePager, BasicText, CaptionTextWrap };

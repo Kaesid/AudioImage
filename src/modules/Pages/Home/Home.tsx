@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { DefaultOnePager, GradientTitle } from "../../../styles/styled-components/basic";
+import { BasicText, CaptionTextWrap, DefaultOnePager, GradientTitle } from "../../../styles/styled-components/basic";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { redirectToCanvasActionName } from "./constants";
 import { ButtonWrap, RedirectButton } from "./styled-components";
@@ -20,6 +20,9 @@ const Home = () => {
           {isSessionActive ? Messages.HOME__BUTTON_TEXT_ACTIVE : Messages.HOME__BUTTON_TEXT}
         </RedirectButton>
       </ButtonWrap>
+      <CaptionTextWrap>
+        <BasicText>{Messages.HOME__INSTRUCTION}</BasicText>
+      </CaptionTextWrap>
     </DefaultOnePager>
   );
 };

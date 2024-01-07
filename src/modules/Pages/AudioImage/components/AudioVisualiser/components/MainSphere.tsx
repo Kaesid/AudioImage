@@ -37,6 +37,7 @@ const MainSphere = ({ material }: IMaterialProps) => {
       main.current.rotation.y = 0;
       material.metalness = 1;
       material.color.r = 0.4;
+      material._distort.value = 0;
     }
   });
 

@@ -7,6 +7,10 @@ const VisualPage = styled.div`
   align-items: center;
   height: calc(100vh - ${headerHeight});
   position: relative;
+
+  #canvas {
+    background: #1a0d27;
+  }
 `;
 
 export { VisualPage };

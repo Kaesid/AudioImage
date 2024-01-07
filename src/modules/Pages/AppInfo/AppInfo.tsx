@@ -1,17 +1,16 @@
 import { appName, Messages } from "../../../constants/text";
-import { BasicText, DefaultOnePager, GradientTitle } from "../../../styles/styled-components/basic";
-import { AboutTextWrap } from "./styled-components";
+import { BasicText, CaptionTextWrap, DefaultOnePager, GradientTitle } from "../../../styles/styled-components/basic";
 
 const AppInfo = () => {
   return (
     <DefaultOnePager>
       <GradientTitle>{appName}</GradientTitle>
-      <AboutTextWrap>
+      <CaptionTextWrap>
         <BasicText>{Messages.ABOUT__FIRST_BLOCK}</BasicText>
         <BasicText>{Messages.ABOUT__SECOND_BLOCK}</BasicText>
         <BasicText>{Messages.ABOUT__THIRD_BLOCK}</BasicText>
         <BasicText>{Messages.ABOUT__PARTING_WORDS}</BasicText>
-      </AboutTextWrap>
+      </CaptionTextWrap>
     </DefaultOnePager>
   );
 };
