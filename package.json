@@ -1,5 +1,6 @@
 {
   "name": "audio_image",
+  "homepage": "https://kaesid.github.io/AudioImage/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

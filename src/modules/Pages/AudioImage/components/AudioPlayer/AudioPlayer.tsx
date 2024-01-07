@@ -44,7 +44,9 @@ const AudioPlayer = () => {
               <ControlPanel>
                 {playerRef.current && <TrackTimer displayedTime={displayedTime} duration={duration} />}
                 <ControlTrackButtons>
-                  {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(-1)}>PREV</PlayButton>}
+                  {tracksList.length > 1 && (
+                    <PlayButton onClick={() => changeTrack(tracksList.length - 1)}>PREV</PlayButton>
+                  )}
                   <PlayButton onClick={toggleStatus}>{isPlaying ? "PAUSE" : "PLAY"}</PlayButton>
                   {tracksList.length > 1 && <PlayButton onClick={() => changeTrack(1)}>NEXT</PlayButton>}
                 </ControlTrackButtons>

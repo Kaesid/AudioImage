@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { VisualPage } from "./styled-components";
+import { Loader, VisualPage } from "./styled-components";
 import { setSessionActive } from "../../../redux/slice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { Html } from "@react-three/drei";
@@ -35,7 +35,13 @@ const AudioImage = () => {
       >
         <color attach="background" args={["#1a032f"]} />
         <fog color="#1a0d27" attach="fog" near={8} far={30} />
-        <Suspense fallback={<Html>Loading...</Html>}>
+        <Suspense
+          fallback={
+            <Html>
+              <Loader>Loading...</Loader>
+            </Html>
+          }
+        >
           <AudioPlayer />
           <AudioVisualiser />
         </Suspense>

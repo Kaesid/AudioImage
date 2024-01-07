@@ -28,13 +28,10 @@ const useAudioControl = () => {
   };
 
   const changeTrack = (increment: number) => {
-    if (tracksList.length > 1) {
-      const currentElemIndex = tracksList.findIndex(({ url }) => currentTrackUrl === url);
-      const nextIndex = Math.abs((currentElemIndex + increment) % tracksList.length);
-      dispatch(setCurrentTrack(tracksList[nextIndex].url));
-    } else {
-      playerRef.current.play();
-    }
+    const currentElemIndex = tracksList.findIndex(({ url }) => currentTrackUrl === url);
+
+    const nextIndex = (currentElemIndex + increment) % tracksList.length;
+    dispatch(setCurrentTrack(tracksList[nextIndex].url));
   };
 
   const setProgress = () => {
@@ -83,7 +80,7 @@ const useAudioControl = () => {
   useEffect(() => {
     if (displayedTime === -1) {
       setProgress();
-      changeTrack(1);
+      tracksList.length > 1 ? changeTrack(1) : playerRef.current.play();
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayedTime]);
 
