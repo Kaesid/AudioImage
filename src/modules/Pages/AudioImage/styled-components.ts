@@ -13,4 +13,8 @@ const VisualPage = styled.div`
   }
 `;
 
-export { VisualPage };
+const Loader = styled.div`
+  color: white;
+`;
+
+export { VisualPage, Loader };
