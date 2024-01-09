@@ -12,7 +12,7 @@ import {
 import { AddTrackButton, TrackTimer, TracksList, VolumeControl } from "./components";
 import { useAudioControl } from "./hooks";
 
-const AudioPlayer = () => {
+const AudioPlayer = ({ isMobile }: { isMobile: boolean }) => {
   const {
     duration,
     updateTracks,
@@ -25,7 +25,7 @@ const AudioPlayer = () => {
     displayedTime,
     changeTrack,
     isPlaying,
-  } = useAudioControl();
+  } = useAudioControl(isMobile);
 
   return (
     <>

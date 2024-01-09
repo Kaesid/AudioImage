@@ -42,7 +42,7 @@ const AudioImage = () => {
             </Html>
           }
         >
-          <AudioPlayer />
+          <AudioPlayer isMobile={isMobile} />
           <AudioVisualiser />
         </Suspense>
         <EffectComposer multisampling={0} disableNormalPass={true}>

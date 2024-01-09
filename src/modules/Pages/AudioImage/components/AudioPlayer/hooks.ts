@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import { getAudioImageState, setCurrentTrack, setCurrentTrackData, updateTracksList } from "../../slice";
 import { IPositionalAudioType, OnVolumeChange, SetTrackActive, UpdateTracks } from "./types";
 
-const useAudioControl = () => {
+const useAudioControl = (isMobile: boolean) => {
   const dispatch = useAppDispatch();
   const { currentTrackUrl, tracksList } = useAppSelector(getAudioImageState);
 
@@ -51,6 +51,11 @@ const useAudioControl = () => {
     dispatch(setCurrentTrackData(new AudioAnalyser(playerRef.current, 128)));
     setProgress(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTrackUrl]);
+
+  useEffect(() => {
+    if (isMobile) window.scrollTo(0, document.body.scrollHeight);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tracksList.length]);
 
   useEffect(() => {
     if (!isPlaying) {

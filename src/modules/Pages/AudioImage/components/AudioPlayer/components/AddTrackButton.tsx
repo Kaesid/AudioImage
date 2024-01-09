@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 import { HiddenInput, InputLabel } from "../styled-components";
 import { UpdateTracks } from "../types";
+import { IconPlus } from "../../../../../../assets/images/svgrepo";
 
 const AddTrackButton = ({ updateTracks }: { updateTracks: UpdateTracks }) => {
   const addFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -11,7 +12,9 @@ const AddTrackButton = ({ updateTracks }: { updateTracks: UpdateTracks }) => {
 
   return (
     <div>
-      <InputLabel htmlFor="audio">+</InputLabel>
+      <InputLabel htmlFor="audio">
+        <IconPlus />
+      </InputLabel>
       <HiddenInput id="audio" accept="audio/*" type="file" onChange={addFile} />
     </div>
   );

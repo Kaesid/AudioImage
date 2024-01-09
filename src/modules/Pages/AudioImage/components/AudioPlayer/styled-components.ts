@@ -77,18 +77,21 @@ const HiddenInput = styled.input`
 `;
 
 const InputLabel = styled.label`
-  font-size: 29px;
   background-color: purple;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
+  padding: 5px;
   width: 35px;
   height: 35px;
   border-radius: 8px;
   box-shadow: 5px 6px 3px 1px #0000001f;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+
+  path {
+    fill: white;
+  }
 `;
 
 const PlayButton = styled.button`
@@ -122,6 +125,7 @@ const AppName = styled.p`
   height: 35px;
   background: linear-gradient(178deg, #b115d0, #18dfbd);
   background-clip: text;
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
