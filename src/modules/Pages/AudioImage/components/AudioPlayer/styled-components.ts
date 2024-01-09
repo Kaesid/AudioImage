@@ -89,8 +89,13 @@ const InputLabel = styled.label`
   align-items: center;
   cursor: pointer;
 
-  path {
-    fill: white;
+  svg {
+    height: unset;
+    width: unset;
+
+    path {
+      fill: white;
+    }
   }
 `;
 
